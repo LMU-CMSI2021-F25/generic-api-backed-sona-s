@@ -1,6 +1,6 @@
 export const fetchMovieData = async (title, apiKey) => {
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${apiKey}&t=${title}`
+    `https://www.omdbapi.com/?apikey=${apiKey}&t=${title}`
   );
 
   if (!response.ok) {
