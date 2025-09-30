@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Clock from "@mui/icons-material/AccessTime";
 
 function Result({ movieData }) {
   const calculateStars = (rating) => {
@@ -16,12 +17,17 @@ function Result({ movieData }) {
   return (
     <ResultContainer>
       <MainInfo>
-        <div>
+        <ImageContainer>
           <Image src={movieData.Poster}></Image>
-        </div>
-        <div>
-          <h2>{movieData.Title}</h2>
-          <p>{movieData.Director}</p>
+          <Runtime>
+            <Clock />
+            {movieData.Runtime}
+          </Runtime>
+        </ImageContainer>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <h2 style={{ color: "white" }}>{movieData.Title}</h2>
+          <p>Directed by {movieData.Director}</p>
+          <p>Written by {movieData.Writer}</p>
           <p>{movieData.Genre}</p>
           <p>Year: {movieData.Year}</p>
           <div style={{ marginTop: "10px", color: "yellow", fontSize: "20px" }}>
@@ -30,6 +36,16 @@ function Result({ movieData }) {
               <span style={{ color: "gray" }}>{movieData.imdbRating} IMDb</span>
             </p>
           </div>
+          <p
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "flex-end",
+              marginBottom: "20px",
+            }}
+          >
+            Released: {movieData.Released}
+          </p>
         </div>
       </MainInfo>
       <SecondaryInfo>
@@ -52,7 +68,8 @@ const ResultContainer = styled.div`
 `;
 
 const MainInfo = styled.div`
-  display: flex;
+  display: grid;
+  grid-auto-flow:column;
   gap: 20px;
   margin: 20px;
 `;
@@ -63,9 +80,28 @@ const SecondaryInfo = styled.div`
   margin: 0 20px;
 `;
 
+const ImageContainer = styled.div`
+  position: relative;
+`;
+
 const Image = styled.img`
   width: 200px;
   border-radius: 5px;
+`;
+
+const Runtime = styled.p`
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+  position: absolute;
+  bottom: 12px;
+  padding: 5px;
+  right: 5px;
+  color: white;
+  font-weight: 600;
+  background-color: #00000098;
+  line-height: 1;
 `;
 
 const Actors = styled.div`
@@ -75,11 +111,12 @@ const Actors = styled.div`
 `;
 
 const Actor = styled.p`
-  background-color: #f0f0f0;
+  backdrop-filter: blur(5px);
   padding: 5px 15px;
   border: 1px solid #ccc;
   border-radius: 100px;
   font-size: 12px;
+  color: white;
 `;
 
 export default Result;

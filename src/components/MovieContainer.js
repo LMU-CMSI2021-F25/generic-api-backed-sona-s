@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Result from "./Result";
+import { fetchMovieData } from "../api";
 
 function MovieContainer() {
   const [searchValue, setSearchValue] = useState("");
@@ -9,40 +10,19 @@ function MovieContainer() {
     setSearchValue(e.target.value);
   };
 
-  const handleSearchClick = () => {
-    console.log("API Key:", process.env.REACT_APP_API_KEY);
-    console.log("Searching for:", searchValue);
-    fetchMovieData(searchValue);
-    console.log("Movie Data:", movieData);
-  };
-
-  const fetchMovieData = async (title) => {
+  const handleSearchClick = async () => {
     try {
       const apiKey = process.env.REACT_APP_API_KEY;
-      const response = await fetch(
-        `http://www.omdbapi.com/?apikey=${apiKey}&t=${title}`
-      );
-      if (!response.ok) {
-        console.error("HTTP error:", response.status);
-        return null;
-      }
-
-      const data = await response.json();
-
-      if (data.Response === "False") {
-        throw new Error(data.Error || "Movie not found");
-      }
+      const data = await fetchMovieData(searchValue, apiKey);
       setMovieData(data);
-      return data;
-    } catch (error) {
-      console.error("Fetch error:", error);
-      return null;
+    } catch (err) {
+      alert(err.message);
     }
   };
 
   return (
     <MovieContainerComponent>
-      <h1>Book-to-Movie Tracker</h1>
+      <Heaeder>Film Tracker 🎬</Heaeder>
       <InputContainer>
         <Input
           value={searchValue}
@@ -74,7 +54,26 @@ const MovieContainerComponent = styled.div`
   height: 80vh;
   backdrop-filter: blur(10px);
   border-radius: 10px;
+  border: 0.1px solid white;
   box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 600px) {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+`;
+
+const Heaeder = styled.h1`
+  color: white;
+  text-shadow: 0px 0px 6px #00000093;
+
+  @media (max-width: 600px) {
+    margin-top: 40px;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -88,23 +87,38 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
+  background-color: #ffffff28;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 0.1px solid #ffffff;
   width: 300px;
   outline: none;
+  color: white;
+  transition: 0.15s;
+
+  &::placeholder {
+    color: #ffffff80;
+  }
+
+  &:focus {
+    background-color: #ffffff48;
+  }
 `;
 
 const Button = styled.button`
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
-  background-color: #007bff;
+  background-color: #4b3effff;
+  border: 1px solid #4b3effff;
   color: white;
   cursor: pointer;
+  transition: 0.15s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #3a2cf1ff;
+    border: 1px solid #3a2cf1ff;
+    transform: scale(1.02);
   }
 `;
 
@@ -113,7 +127,7 @@ const ResultContainer = styled.div`
   flex: 1;
   justify-content: center;
   align-items: center;
-  color:gray;
+  color: gray;
 `;
 
 export default MovieContainer;
